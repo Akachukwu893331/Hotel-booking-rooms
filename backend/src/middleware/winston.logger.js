@@ -57,11 +57,14 @@
 
 
 
-
 const winston = require('winston');
+const morgan = require('morgan');
 
 const { combine, timestamp, printf, colorize, errors } = winston.format;
 
+// ------------------------
+// Winston Logger (Vercel-safe)
+// ------------------------
 const logger = winston.createLogger({
   level: process.env.APP_LOG_LEVEL || 'info',
   format: combine(
@@ -73,9 +76,24 @@ const logger = winston.createLogger({
     })
   ),
   transports: [
-    // Only Console transport → SAFE for Vercel
+    // Console-only transport → no filesystem writes
     new winston.transports.Console()
   ],
 });
 
-module.exports = logger;
+// ------------------------
+// Morgan Middleware Logger (Vercel-safe)
+// ------------------------
+const morganLogger = morgan('dev', {
+  stream: {
+    write: (message) => {
+      logger.info(message.trim()); // send Morgan logs to Winston console logger
+    },
+  },
+});
+
+module.exports = {
+  logger,
+  morganLogger,
+};
+
