@@ -108,6 +108,7 @@ import FeaturedRooms from '../components/home/FeaturedRooms';
 import Hero from '../components/home/Hero';
 import Services from '../components/home/Services';
 import MainLayout from '../components/layout';
+import ResortTestimonials from '../components/home/ResortTestimonials';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -117,7 +118,7 @@ function Home(props) {
       <Hero>
         <Banner
           title='luxurious rooms'
-          subtitle='deluxe rooms starting at $299'
+          subtitle='beach resort rooms starting at $100'
         >
           <Link href='/rooms' className='btn-primary'>
             our rooms
@@ -150,6 +151,7 @@ function Home(props) {
           />
         )}
       </Skeleton>
+      <ResortTestimonials/>
     </MainLayout>
   );
 }

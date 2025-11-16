@@ -12,6 +12,7 @@ import React from 'react';
 import Footers from './footers';
 import Navbar from './navbar';
 
+
 function MainLayout({ children, title }) {
   return (
     <>
@@ -25,6 +26,7 @@ function MainLayout({ children, title }) {
       <Navbar />
       <main style={{ overflow: 'auto' }}>
         {children}
+        
       </main>
       <Footers />
     </>

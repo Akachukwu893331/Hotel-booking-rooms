@@ -1,123 +1,305 @@
 /**
  * @name Hotel Room Booking System
- * @author Md. Samiur Rahman (Mukul)
- * @description Hotel Room Booking and Management System Software ~ Developed By Md. Samiur Rahman (Mukul)
- * @copyright ©2023 ― Md. Samiur Rahman (Mukul). All rights reserved.
+ * @author Daniel
+ * @description Hotel Room Booking and Management System Software ~ Developed By Daniel
+ * @copyright ©2023 ― Daniel All rights reserved.
  * @version v0.0.1
  *
  */
 
+// import React, { useEffect, useState } from 'react';
+// import Title from '../home/Title';
+
+// export default function RoomFilter({ ourRooms, setOurFilteredRooms }) {
+//   const [allowBreakfast, setAllowBreakfast] = useState(false);
+//   const [allowPets, setAllowPets] = useState(false);
+
+//   // function to handle `room_type` filed filtering
+//   const roomTypeFiltering = (value) => {
+//     if (value === 'all') {
+//       setOurFilteredRooms(ourRooms);
+//     } else {
+//       const filteredRooms = ourRooms.filter((room) => room.room_type === value);
+//       setOurFilteredRooms(filteredRooms);
+//     }
+//   };
+
+//   // function to handle `room_price` filed filtering
+//   const roomPriceFiltering = (value) => {
+//     const filteredRooms = ourRooms.filter((room) => room.room_price <= parseInt(value, 10));
+//     setOurFilteredRooms(filteredRooms);
+//   };
+
+//   // function to handle `provide_breakfast` filed filtering
+//   useEffect(() => {
+//     if (allowBreakfast) {
+//       const filteredRooms = ourRooms.filter((room) => room.provide_breakfast === allowBreakfast);
+//       setOurFilteredRooms(filteredRooms);
+//     } else {
+//       setOurFilteredRooms(ourRooms);
+//     }
+//   }, [allowBreakfast]);
+
+//   // function to handle `allow_pets` filed filtering
+//   useEffect(() => {
+//     if (allowPets) {
+//       const filteredRooms = ourRooms.filter((room) => room.allow_pets === allowPets);
+//       setOurFilteredRooms(filteredRooms);
+//     } else {
+//       setOurFilteredRooms(ourRooms);
+//     }
+//   }, [allowPets]);
+
+//   return (
+//     <section className='filter-container'>
+//       <Title title='search rooms' />
+
+//       <form className='filter-form'>
+//         {/* select type start */}
+//         <div className='form-group'>
+//           <label htmlFor='type'>rooms type</label>
+//           <select
+//             className='form-control'
+//             onChange={(e) => roomTypeFiltering(e.target.value)}
+//             defaultValue='all'
+//             name='type'
+//             id='type'
+//           >
+//             <option value='all'>All</option>
+//             <option value='single'>Single</option>
+//             <option value='couple'>Couple</option>
+//             <option value='family'>Family</option>
+//             <option value='presidential'>Presidential</option>
+//           </select>
+//         </div>
+//         {/* select type end */}
+
+//         {/* room price start */}
+//         <div className='form-group'>
+//           <label htmlFor='price'>started price $ 100</label>
+//           <input
+//             className='form-control'
+//             type='range'
+//             name='price'
+//             id='price'
+//             min={100}
+//             max={1000}
+//             defaultValue={1000}
+//             onChange={(e) => roomPriceFiltering(e.target.value)}
+//           />
+//         </div>
+//         {/* room price end */}
+
+//         {/* extras start */}
+//         <div className='form-group'>
+//           {/* breakfast checked */}
+//           <div className='single-extra'>
+//             <input
+//               name='breakfast'
+//               type='checkbox'
+//               id='breakfast'
+//               checked={allowBreakfast}
+//               onChange={() => setAllowBreakfast(!allowBreakfast)}
+//             />
+//             <label htmlFor='breakfast'>breakfast</label>
+//           </div>
+
+//           {/* pets checked */}
+//           <div className='single-extra'>
+//             <input
+//               type='checkbox'
+//               name='pets'
+//               id='pets'
+//               checked={allowPets}
+//               onChange={() => setAllowPets(!allowPets)}
+//             />
+//             <label htmlFor='pets'>pets</label>
+//           </div>
+//         </div>
+//         {/* extras end */}
+//       </form>
+//     </section>
+//   );
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 import React, { useEffect, useState } from 'react';
-import Title from '../home/Title';
+//import './RoomFilter.css';
 
 export default function RoomFilter({ ourRooms, setOurFilteredRooms }) {
   const [allowBreakfast, setAllowBreakfast] = useState(false);
   const [allowPets, setAllowPets] = useState(false);
+  const [priceRange, setPriceRange] = useState(1000);
+  const [roomType, setRoomType] = useState('all');
 
-  // function to handle `room_type` filed filtering
-  const roomTypeFiltering = (value) => {
-    if (value === 'all') {
-      setOurFilteredRooms(ourRooms);
-    } else {
-      const filteredRooms = ourRooms.filter((room) => room.room_type === value);
-      setOurFilteredRooms(filteredRooms);
-    }
-  };
-
-  // function to handle `room_price` filed filtering
-  const roomPriceFiltering = (value) => {
-    const filteredRooms = ourRooms.filter((room) => room.room_price <= parseInt(value, 10));
-    setOurFilteredRooms(filteredRooms);
-  };
-
-  // function to handle `provide_breakfast` filed filtering
+  // Combined filtering function
   useEffect(() => {
+    let filteredRooms = [...ourRooms];
+
+    if (roomType !== 'all') {
+      filteredRooms = filteredRooms.filter(room => room.room_type === roomType);
+    }
+
+    filteredRooms = filteredRooms.filter(room => room.room_price <= priceRange);
+
     if (allowBreakfast) {
-      const filteredRooms = ourRooms.filter((room) => room.provide_breakfast === allowBreakfast);
-      setOurFilteredRooms(filteredRooms);
-    } else {
-      setOurFilteredRooms(ourRooms);
+      filteredRooms = filteredRooms.filter(room => room.provide_breakfast === true);
     }
-  }, [allowBreakfast]);
 
-  // function to handle `allow_pets` filed filtering
-  useEffect(() => {
     if (allowPets) {
-      const filteredRooms = ourRooms.filter((room) => room.allow_pets === allowPets);
-      setOurFilteredRooms(filteredRooms);
-    } else {
-      setOurFilteredRooms(ourRooms);
+      filteredRooms = filteredRooms.filter(room => room.allow_pets === true);
     }
-  }, [allowPets]);
+
+    setOurFilteredRooms(filteredRooms);
+  }, [roomType, priceRange, allowBreakfast, allowPets, ourRooms, setOurFilteredRooms]);
+
+  const roomTypeOptions = [
+    { value: 'all', label: 'All Rooms', icon: '🏠' },
+    { value: 'single', label: 'Single', icon: '👤' },
+    { value: 'couple', label: 'Couple', icon: '👩‍❤️‍👨' },
+    { value: 'family', label: 'Family', icon: '👨‍👩‍👧‍👦' },
+    { value: 'presidential', label: 'Presidential', icon: '👑' }
+  ];
+
+  const clearAllFilters = () => {
+    setRoomType('all');
+    setPriceRange(1000);
+    setAllowBreakfast(false);
+    setAllowPets(false);
+  };
 
   return (
-    <section className='filter-container'>
-      <Title title='search rooms' />
-
-      <form className='filter-form'>
-        {/* select type start */}
-        <div className='form-group'>
-          <label htmlFor='type'>rooms type</label>
-          <select
-            className='form-control'
-            onChange={(e) => roomTypeFiltering(e.target.value)}
-            defaultValue='all'
-            name='type'
-            id='type'
+    <section className='filter-container-wide'>
+      <div className='wide-filter-box'>
+        {/* Header */}
+        <div className='wide-filter-header'>
+          <div className='wide-title-section'>
+            <h3 className='wide-filter-title'>Filter Rooms</h3>
+            <div className='price-display-wide'>Up to ${priceRange}</div>
+          </div>
+          <button 
+            className='clear-all-wide'
+            onClick={clearAllFilters}
+            disabled={roomType === 'all' && priceRange === 1000 && !allowBreakfast && !allowPets}
           >
-            <option value='all'>All</option>
-            <option value='single'>Single</option>
-            <option value='couple'>Couple</option>
-            <option value='family'>Family</option>
-            <option value='presidential'>Presidential</option>
-          </select>
+            Clear All
+          </button>
         </div>
-        {/* select type end */}
 
-        {/* room price start */}
-        <div className='form-group'>
-          <label htmlFor='price'>started price $ 100</label>
-          <input
-            className='form-control'
-            type='range'
-            name='price'
-            id='price'
-            min={100}
-            max={1000}
-            defaultValue={1000}
-            onChange={(e) => roomPriceFiltering(e.target.value)}
-          />
-        </div>
-        {/* room price end */}
-
-        {/* extras start */}
-        <div className='form-group'>
-          {/* breakfast checked */}
-          <div className='single-extra'>
-            <input
-              name='breakfast'
-              type='checkbox'
-              id='breakfast'
-              checked={allowBreakfast}
-              onChange={() => setAllowBreakfast(!allowBreakfast)}
-            />
-            <label htmlFor='breakfast'>breakfast</label>
+        {/* Main Filters Row */}
+        <div className='wide-filters-row'>
+          {/* Room Type */}
+          <div className='wide-filter-group'>
+            <label className='wide-group-label'>Room Type</label>
+            <div className='wide-type-buttons'>
+              {roomTypeOptions.map(option => (
+                <button
+                  key={option.value}
+                  className={`wide-type-btn ${roomType === option.value ? 'active' : ''}`}
+                  onClick={() => setRoomType(option.value)}
+                >
+                  <span className='wide-type-icon'>{option.icon}</span>
+                  <span className='wide-type-label'>{option.label}</span>
+                </button>
+              ))}
+            </div>
           </div>
 
-          {/* pets checked */}
-          <div className='single-extra'>
-            <input
-              type='checkbox'
-              name='pets'
-              id='pets'
-              checked={allowPets}
-              onChange={() => setAllowPets(!allowPets)}
-            />
-            <label htmlFor='pets'>pets</label>
+          {/* Price Range */}
+          <div className='wide-filter-group'>
+            <label className='wide-group-label'>Price Range</label>
+            <div className='wide-slider-container'>
+              <input
+                className='wide-slider'
+                type='range'
+                min={100}
+                max={1000}
+                step={50}
+                value={priceRange}
+                onChange={(e) => setPriceRange(parseInt(e.target.value))}
+              />
+              <div className='wide-slider-labels'>
+                <span>$100</span>
+                <span>$500</span>
+                <span>$1000</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Amenities */}
+          <div className='wide-filter-group'>
+            <label className='wide-group-label'>Amenities</label>
+            <div className='wide-amenities'>
+              <label className='wide-amenity-option'>
+                <input
+                  type='checkbox'
+                  checked={allowBreakfast}
+                  onChange={(e) => setAllowBreakfast(e.target.checked)}
+                />
+                <span className='wide-checkbox'></span>
+                <span className='wide-amenity-label'>Breakfast</span>
+              </label>
+              <label className='wide-amenity-option'>
+                <input
+                  type='checkbox'
+                  checked={allowPets}
+                  onChange={(e) => setAllowPets(e.target.checked)}
+                />
+                <span className='wide-checkbox'></span>
+                <span className='wide-amenity-label'>Pets</span>
+              </label>
+            </div>
           </div>
         </div>
-        {/* extras end */}
-      </form>
+
+        {/* Active Filters Bar */}
+        <div className='wide-active-filters'>
+          <span className='active-filters-label'>Active:</span>
+          <div className='wide-active-tags'>
+            {roomType !== 'all' && (
+              <span className='wide-active-tag'>
+                {roomTypeOptions.find(opt => opt.value === roomType)?.label}
+                <button onClick={() => setRoomType('all')}>×</button>
+              </span>
+            )}
+            {priceRange < 1000 && (
+              <span className='wide-active-tag'>
+                Under ${priceRange}
+                <button onClick={() => setPriceRange(1000)}>×</button>
+              </span>
+            )}
+            {allowBreakfast && (
+              <span className='wide-active-tag'>
+                Breakfast
+                <button onClick={() => setAllowBreakfast(false)}>×</button>
+              </span>
+            )}
+            {allowPets && (
+              <span className='wide-active-tag'>
+                Pets
+                <button onClick={() => setAllowPets(false)}>×</button>
+              </span>
+            )}
+            {(roomType === 'all' && priceRange === 1000 && !allowBreakfast && !allowPets) && (
+              <span className='no-filters-text'>No filters applied</span>
+            )}
+          </div>
+        </div>
+      </div>
     </section>
   );
 }

@@ -1,8 +1,8 @@
 /**
  * @name Hotel Room Booking System
- * @author Md. Samiur Rahman (Mukul)
- * @description Hotel Room Booking and Management System Software ~ Developed By Md. Samiur Rahman (Mukul)
- * @copyright ©2023 ― Md. Samiur Rahman (Mukul). All rights reserved.
+ * @author Daniel
+ * @description Hotel Room Booking and Management System Software ~ Developed By Daniel
+ * @copyright Daniel. All rights reserved.
  * @version v0.0.1
  *
  */
@@ -22,7 +22,7 @@ function Navbar() {
   const router = useRouter();
 
   return (
-    <nav className='navbar'>
+    <nav className='navbar mt-10'>
       <div className='nav-center'>
         <div className='nav-header'>
           {/* app logo */}
@@ -44,7 +44,7 @@ function Navbar() {
         {/* navbar login button */}
         {user?.id && token ? (<UserPopover />) : (
           <Button
-            style={{ position: 'absolute', right: '100px', top: '20px' }}
+            style={{ position: 'absolute', right: '100px', top: '15px' }}
             onClick={() => router.push('/auth/login')}
             type='primary'
             size='large'
@@ -60,6 +60,9 @@ function Navbar() {
           </li>
           <li>
             <Link href='/rooms'>Rooms</Link>
+          </li>
+          <li>
+            <Link href='/rooms'>About Us</Link>
           </li>
         </ul>
       </div>

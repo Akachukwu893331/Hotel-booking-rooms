@@ -7,31 +7,32 @@
  *
  */
 
-import {
-  FaBeer, FaCocktail, FaHiking, FaShuttleVan
+import { 
+  FaSun, FaGlassMartiniAlt, FaHotel, FaDumbbell 
 } from 'react-icons/fa';
 
 const services = [
   {
-    icon: <FaCocktail />,
-    title: 'free cocktails',
-    info: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores est eaque error provident unde eligendi.'
+    icon: <FaSun />,
+    title: 'Private Sunset Beach',
+    info: 'Unwind on our exclusive beach with golden sands and serene waves. Enjoy sunbathing, beach games, or evening strolls while watching the sun dip below the horizon.'
   },
   {
-    icon: <FaHiking />,
-    title: 'endless hiking',
-    info: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores est eaque error provident unde eligendi.'
+    icon: <FaGlassMartiniAlt />,
+    title: 'Poolside Lounge & Bar',
+    info: 'Sip handcrafted cocktails and refreshing beverages at our chic poolside lounge. Relax under cabanas and enjoy the ocean breeze with gourmet bites.'
   },
   {
-    icon: <FaShuttleVan />,
-    title: 'free shuttle',
-    info: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores est eaque error provident unde eligendi.'
-  },
-  {
-    icon: <FaBeer />,
-    title: 'storages beer',
-    info: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores est eaque error provident unde eligendi.'
+    icon: <FaHotel />,
+    title: 'Premium Suites',
+    info: 'Stay in elegantly designed suites with panoramic ocean views, plush bedding, private balconies, and all modern amenities for the ultimate comfort.'
   }
+  // {
+  //   icon: <FaDumbbell />,
+  //   title: 'Wellness & Fitness Center',
+  //   info: 'Maintain your fitness routine in our state-of-the-art gym or join yoga and meditation sessions designed to rejuvenate your body and mind.'
+  // }
 ];
 
 export default services;
+

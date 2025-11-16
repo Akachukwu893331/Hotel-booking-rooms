@@ -241,7 +241,7 @@ function Main() {
             target='_blank'
             rel='noreferrer'
           >
-            Md. Samiur Rahman (Mukul)
+            Daniel
           </a>
         </Footer>
       </Layout>
