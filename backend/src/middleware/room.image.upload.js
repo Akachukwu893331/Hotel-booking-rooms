@@ -71,24 +71,95 @@
 
 
 
+// const multer = require('multer');
+// const path = require('path');
+// const fs = require('fs');
+
+// // Helper to get upload path
+// const uploadPath = () => {
+//   // Use absolute path based on this file's location
+//   const UPLOADS_FOLDER = path.join(__dirname, '../../public/uploads/rooms');
+
+//   try {
+//     // Create folder recursively if it doesn't exist
+//     if (!fs.existsSync(UPLOADS_FOLDER)) {
+//       fs.mkdirSync(UPLOADS_FOLDER, { recursive: true });
+//       console.log('Created uploads folder:', UPLOADS_FOLDER);
+//     }
+//   } catch (err) {
+//     console.error('Error creating upload folder:', err);
+//     throw err; // stop if folder can't be created
+//   }
+
+//   return UPLOADS_FOLDER;
+// };
+
+// // Multer storage configuration
+// const storage = multer.diskStorage({
+//   destination: (_req, _file, cb) => {
+//     cb(null, uploadPath());
+//   },
+//   filename: (_req, file, cb) => {
+//     const fileExt = path.extname(file.originalname);
+//     const fileName = `${file.originalname
+//       .replace(fileExt, '')
+//       .toLowerCase()
+//       .split(' ')
+//       .join('-')}-${Date.now()}`;
+//     cb(null, fileName + fileExt);
+//   },
+// });
+
+// // Multer upload object
+// const roomImageUpload = multer({
+//   storage,
+//   limits: {
+//     fileSize: 1 * 1024 * 1024, // 1MB
+//   },
+//   fileFilter: (_req, file, cb) => {
+//     const allowedTypes = ['image/png', 'image/jpg', 'image/jpeg'];
+
+//     if (file.fieldname === 'room_images') {
+//       if (allowedTypes.includes(file.mimetype)) {
+//         cb(null, true);
+//       } else {
+//         cb(new Error('Only .jpg, .png or .jpeg format allowed!'));
+//       }
+//     } else {
+//       cb(new Error('Unknown field!'));
+//     }
+//   },
+// });
+
+// module.exports = roomImageUpload;
+
+
+
+
+
+
+
+
+
+
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
 // Helper to get upload path
 const uploadPath = () => {
-  // Use absolute path based on this file's location
-  const UPLOADS_FOLDER = path.join(__dirname, '../../public/uploads/rooms');
+  // Use /tmp for Vercel (writable during request)
+  const UPLOADS_FOLDER = path.join('/tmp/uploads/rooms');
 
   try {
     // Create folder recursively if it doesn't exist
     if (!fs.existsSync(UPLOADS_FOLDER)) {
       fs.mkdirSync(UPLOADS_FOLDER, { recursive: true });
-      console.log('Created uploads folder:', UPLOADS_FOLDER);
+      console.log('Uploads folder ready:', UPLOADS_FOLDER);
     }
   } catch (err) {
-    console.error('Error creating upload folder:', err);
-    throw err; // stop if folder can't be created
+    console.error('Failed to create uploads folder:', err);
+    throw err;
   }
 
   return UPLOADS_FOLDER;
@@ -96,49 +167,28 @@ const uploadPath = () => {
 
 // Multer storage configuration
 const storage = multer.diskStorage({
-  destination: (_req, _file, cb) => {
-    cb(null, uploadPath());
-  },
+  destination: (_req, _file, cb) => cb(null, uploadPath()),
   filename: (_req, file, cb) => {
-    const fileExt = path.extname(file.originalname);
-    const fileName = `${file.originalname
-      .replace(fileExt, '')
+    const ext = path.extname(file.originalname);
+    const name = `${file.originalname
+      .replace(ext, '')
       .toLowerCase()
       .split(' ')
-      .join('-')}-${Date.now()}`;
-    cb(null, fileName + fileExt);
+      .join('-')}-${Date.now()}${ext}`;
+    cb(null, name);
   },
 });
 
-// Multer upload object
+// Multer upload instance
 const roomImageUpload = multer({
   storage,
-  limits: {
-    fileSize: 1 * 1024 * 1024, // 1MB
-  },
+  limits: { fileSize: 1 * 1024 * 1024 }, // 1MB
   fileFilter: (_req, file, cb) => {
     const allowedTypes = ['image/png', 'image/jpg', 'image/jpeg'];
-
-    if (file.fieldname === 'room_images') {
-      if (allowedTypes.includes(file.mimetype)) {
-        cb(null, true);
-      } else {
-        cb(new Error('Only .jpg, .png or .jpeg format allowed!'));
-      }
-    } else {
-      cb(new Error('Unknown field!'));
-    }
+    if (file.fieldname !== 'room_images') return cb(new Error('Unknown field!'));
+    if (!allowedTypes.includes(file.mimetype)) return cb(new Error('Only .jpg, .png, .jpeg allowed'));
+    cb(null, true);
   },
 });
 
 module.exports = roomImageUpload;
-
-
-
-
-
-
-
-
-
-
