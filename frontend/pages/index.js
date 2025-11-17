@@ -142,7 +142,9 @@ function Home(props) {
         ) : props?.error ? (
           <Result
             title='Failed to fetch'
-            subTitle={props?.error?.message || 'Sorry! Something went wrong.'}
+            subTitle={
+              props?.error?.message || 'Sorry! Something went wrong.'
+            }
             status='error'
           />
         ) : (
@@ -151,7 +153,8 @@ function Home(props) {
           />
         )}
       </Skeleton>
-      <ResortTestimonials/>
+
+      <ResortTestimonials />
     </MainLayout>
   );
 }
@@ -168,8 +171,8 @@ export async function getServerSideProps() {
     return {
       props: {
         featuredRooms,
-        error: null,
-      },
+        error: null
+      }
     };
   } catch (err) {
     return {
@@ -179,9 +182,9 @@ export async function getServerSideProps() {
           message:
             err?.response?.data?.message ||
             err?.message ||
-            'Failed to fetch featured rooms',
-        },
-      },
+            'Failed to fetch featured rooms'
+        }
+      }
     };
   }
 }

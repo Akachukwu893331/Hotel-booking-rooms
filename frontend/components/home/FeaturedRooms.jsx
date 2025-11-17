@@ -100,8 +100,6 @@
 
 
 
-
-
 import React from 'react';
 import Link from 'next/link';
 import Room from '../shared/Room';
@@ -111,21 +109,26 @@ function FeaturedRooms({ featuredRoom = [] }) {
   const rooms = featuredRoom.slice(0, 3);
 
   return (
-    <section className="featured-section">
-      <h2 className="featured-title">Featured Rooms</h2>
+    <section className='featured-section'>
+      <h2 className='featured-title'>Featured Rooms</h2>
 
-      <div className="featured-grid">
+      <div className='featured-grid'>
         {rooms.map((room) => (
-          <div key={room._id} className="featured-card">
-            
+          <div key={room._id} className='featured-card'>
+
             {/* Price + Type */}
-            <div className="featured-top">
-              <span className="featured-price">${room.room_price}/night</span>
-              <span className="featured-type">{room.room_type}</span>
+            <div className='featured-top'>
+              <span className='featured-price'>
+                {room.room_price}
+                /night
+              </span>
+              <span className='featured-type'>
+                {room.room_type}
+              </span>
             </div>
 
             {/* Image */}
-            <div className="featured-image">
+            <div className='featured-image'>
               <img
                 src={room?.room_images[0]?.url || '/img/jpeg/room-1.jpeg'}
                 alt={room.room_name}
@@ -133,13 +136,20 @@ function FeaturedRooms({ featuredRoom = [] }) {
             </div>
 
             {/* Body */}
-            <div className="featured-body">
-              <h3 className="featured-name">{room.room_name}</h3>
-              <p className="featured-desc">
-                {room.room_description?.slice(0, 80) || 'Luxurious room with premium comfort.'}...
+            <div className='featured-body'>
+              <h3 className='featured-name'>
+                {room.room_name}
+              </h3>
+              <p className='featured-desc'>
+                {room.room_description?.slice(0, 80) ||
+                  'Luxurious room with premium comfort.'}
+                ...
               </p>
 
-              <Link href={`/rooms/${room.room_slug}`} className="featured-btn">
+              <Link
+                href={`/rooms/${room.room_slug}`}
+                className='featured-btn'
+              >
                 View Details
               </Link>
             </div>
@@ -149,8 +159,8 @@ function FeaturedRooms({ featuredRoom = [] }) {
       </div>
 
       {/* See More Button */}
-      <div className="featured-more-wrap">
-        <Link href="/rooms" className="featured-more-btn">
+      <div className='featured-more-wrap'>
+        <Link href='/rooms' className='featured-more-btn'>
           See More Rooms
         </Link>
       </div>

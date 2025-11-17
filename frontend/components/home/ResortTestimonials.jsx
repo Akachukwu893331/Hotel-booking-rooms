@@ -1,42 +1,42 @@
-import React from "react";
+import React from 'react';
 import Link from 'next/link';
 
 function ResortTestimonials() {
   const testimonials = [
     {
-      name: "Olivia Bennett",
+      name: 'Olivia Bennett',
       text: "The best beach resort I've ever visited. Stunning views, warm staff, and unforgettable sunsets. Every moment felt like paradise.",
-      img: "https://randomuser.me/api/portraits/women/65.jpg",
+      img: 'https://randomuser.me/api/portraits/women/65.jpg',
       rating: 5,
-      location: "New York, USA"
+      location: 'New York, USA'
     },
     {
-      name: "Michael Carter",
-      text: "Our villa was beyond incredible. Private beach, 24/7 service — worth every penny. The attention to detail was remarkable.",
-      img: "https://randomuser.me/api/portraits/men/32.jpg",
+      name: 'Michael Carter',
+      text: 'Our villa was beyond incredible. Private beach, 24/7 service — worth every penny. The attention to detail was remarkable.',
+      img: 'https://randomuser.me/api/portraits/men/32.jpg',
       rating: 5,
-      location: "London, UK"
+      location: 'London, UK'
     },
     {
-      name: "Sophia Martinez",
+      name: 'Sophia Martinez',
       text: "The spa treatments and infinity pool were heavenly. I'm already planning my next visit. Truly a transformative experience.",
-      img: "https://randomuser.me/api/portraits/women/45.jpg",
+      img: 'https://randomuser.me/api/portraits/women/45.jpg',
       rating: 5,
-      location: "Madrid, Spain"
+      location: 'Madrid, Spain'
     },
     {
-      name: "James Wilson",
+      name: 'James Wilson',
       text: "Exceptional service from start to finish. The culinary experience alone deserves five stars. We'll be back next year!",
-      img: "https://randomuser.me/api/portraits/men/67.jpg",
+      img: 'https://randomuser.me/api/portraits/men/67.jpg',
       rating: 5,
-      location: "Sydney, Australia"
+      location: 'Sydney, Australia'
     },
     {
-      name: "Emma Thompson",
-      text: "Perfect blend of luxury and nature. Waking up to ocean views every morning was magical. The staff made us feel like family.",
-      img: "https://randomuser.me/api/portraits/women/33.jpg",
+      name: 'Emma Thompson',
+      text: 'Perfect blend of luxury and nature. Waking up to ocean views every morning was magical. The staff made us feel like family.',
+      img: 'https://randomuser.me/api/portraits/women/33.jpg',
       rating: 5,
-      location: "Vancouver, Canada"
+      location: 'Vancouver, Canada'
     }
   ];
 
@@ -45,55 +45,55 @@ function ResortTestimonials() {
 
   const renderStars = (rating) => {
     return Array.from({ length: 5 }, (_, i) => (
-      <span key={i} className={`star ${i < rating ? "filled" : ""}`}>
+      <span key={i} className={`star ${i < rating ? 'filled' : ''}`}>
         ★
       </span>
     ));
   };
 
   return (
-    <section className="resort-testimonials">
-      <div className="testimonials-container">
+    <section className='resort-testimonials'>
+      <div className='testimonials-container'>
         {/* Header */}
-        <div className="testimonials-header">
-          <span className="section-label">Testimonials</span>
-          <h2 className="title">Experiences That Speak Volumes</h2>
-          <p className="subtitle">
+        <div className='testimonials-header'>
+          <span className='section-label'>Testimonials</span>
+          <h2 className='title'>Experiences That Speak Volumes</h2>
+          <p className='subtitle'>
             Discover why our guests return year after year to create unforgettable memories
           </p>
         </div>
 
         {/* Slider Container */}
-        <div className="testimonial-slider-wrapper">
-          <div className="slider-overlay left"></div>
-          <div className="slider-overlay right"></div>
-          
-          <div className="testimonial-slider">
-            <div className="testimonial-track">
+        <div className='testimonial-slider-wrapper'>
+          <div className='slider-overlay left'></div>
+          <div className='slider-overlay right'></div>
+
+          <div className='testimonial-slider'>
+            <div className='testimonial-track'>
               {scrollingTestimonials.map((item, i) => (
-                <div className="testimonial-card" key={i}>
+                <div className='testimonial-card' key={i}>
                   {/* Rating Stars */}
-                  <div className="rating-stars">
+                  <div className='rating-stars'>
                     {renderStars(item.rating)}
                   </div>
-                  
+
                   {/* Quote Icon */}
-                  <div className="quote-icon">❝</div>
-                  
+                  <div className='quote-icon'>❝</div>
+
                   {/* Testimonial Text */}
-                  <p className="testimonial-text">"{item.text}"</p>
-                  
+                  <p className='testimonial-text'>"{item.text}"</p>
+
                   {/* Guest Info */}
-                  <div className="guest-info">
-                    <img 
-                      src={item.img} 
-                      alt={item.name} 
-                      className="testimonial-img"
-                      loading="lazy"
+                  <div className='guest-info'>
+                    <img
+                      src={item.img}
+                      alt={item.name}
+                      className='testimonial-img'
+                      loading='lazy'
                     />
-                    <div className="guest-details">
-                      <h4 className="testimonial-name">{item.name}</h4>
-                      <span className="guest-location">{item.location}</span>
+                    <div className='guest-details'>
+                      <h4 className='testimonial-name'>{item.name}</h4>
+                      <span className='guest-location'>{item.location}</span>
                     </div>
                   </div>
                 </div>
@@ -103,24 +103,23 @@ function ResortTestimonials() {
         </div>
 
         {/* Navigation Dots */}
-        <div className="slider-nav">
+        <div className='slider-nav'>
           {testimonials.map((_, i) => (
-            <button 
-              key={i} 
-              className="nav-dot"
+            <button
+              key={i}
+              type='button'
+              className='nav-dot'
               aria-label={`Go to testimonial ${i + 1}`}
             />
           ))}
         </div>
 
         {/* CTA Section */}
-        <div className="testimonials-cta">
-          <p className="cta-text">Ready to create your own story?</p>
-          <Link 
-            href="/auth/registration"
-            className="cta-button">
+        <div className='testimonials-cta'>
+          <p className='cta-text'>Ready to create your own story?</p>
+          <Link href='/auth/registration' className='cta-button'>
             Book Your Stay
-            <span className="arrow">→</span>
+            <span className='arrow'>→</span>
           </Link>
         </div>
       </div>
@@ -129,5 +128,3 @@ function ResortTestimonials() {
 }
 
 export default ResortTestimonials;
-
-

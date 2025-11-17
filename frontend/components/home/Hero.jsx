@@ -24,18 +24,17 @@
 // export default Hero;
 
 
-
-import React from "react";
+import React from 'react';
 
 function Hero({ children, hero }) {
   return (
     <section className={`relative overflow-hidden ${hero}`}>
-      <div className="relative z-10 text-center px-6 max-w-3xl mx-auto animate-fadeIn">
+      <div className='relative z-10 text-center px-6 max-w-3xl mx-auto animate-fadeIn'>
         {children}
       </div>
 
       {/* Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-black/10 z-0"></div>
+      <div className='absolute inset-0 bg-gradient-to-b from-black/40 to-black/10 z-0'></div>
 
       <style>
         {`
@@ -53,7 +52,8 @@ function Hero({ children, hero }) {
 }
 
 Hero.defaultProps = {
-  hero: "defaultHero",
+  hero: 'defaultHero'
 };
 
 export default Hero;
+

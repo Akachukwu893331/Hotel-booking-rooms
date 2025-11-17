@@ -50,22 +50,29 @@
 import React from 'react';
 import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from 'react-icons/fa';
 
-
 function Footers() {
   return (
-    <footer className="footer">
-      <div className="footer-container">
+    <footer className='footer'>
+      <div className='footer-container'>
         {/* About */}
         <div>
           <h3>Beach Resort</h3>
           <p>
             Experience luxury and comfort at our beachfront paradise. Private suites, premium dining, and unforgettable experiences await.
           </p>
-          <div className="social-icons">
-            <a href="#" aria-label="Facebook"><FaFacebookF /></a>
-            <a href="#" aria-label="Twitter"><FaTwitter /></a>
-            <a href="#" aria-label="Instagram"><FaInstagram /></a>
-            <a href="#" aria-label="LinkedIn"><FaLinkedinIn /></a>
+          <div className='social-icons'>
+            <a href='#' aria-label='Facebook'>
+              <FaFacebookF />
+            </a>
+            <a href='#' aria-label='Twitter'>
+              <FaTwitter />
+            </a>
+            <a href='#' aria-label='Instagram'>
+              <FaInstagram />
+            </a>
+            <a href='#' aria-label='LinkedIn'>
+              <FaLinkedinIn />
+            </a>
           </div>
         </div>
 
@@ -73,10 +80,18 @@ function Footers() {
         <div>
           <h3>Quick Links</h3>
           <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/rooms">Rooms</a></li>
-            <li><a href="/about">About Us</a></li>
-            <li><a href="/contact">Contact</a></li>
+            <li>
+              <a href='/'>Home</a>
+            </li>
+            <li>
+              <a href='/rooms'>Rooms</a>
+            </li>
+            <li>
+              <a href='/about'>About Us</a>
+            </li>
+            <li>
+              <a href='/contact'>Contact</a>
+            </li>
           </ul>
         </div>
 
@@ -94,14 +109,14 @@ function Footers() {
         <div>
           <h3>Newsletter</h3>
           <p>Subscribe to get our latest offers and updates</p>
-          <div className="newsletter">
-            <input type="email" placeholder="Your email" />
-            <button>Subscribe</button>
+          <div className='newsletter'>
+            <input type='email' placeholder='Your email' />
+            <button type='button'>Subscribe</button>
           </div>
         </div>
       </div>
 
-      <div className="footer-bottom">
+      <div className='footer-bottom'>
         ©2025 Beach Resort. Designed with ❤️ for luxury and comfort.
       </div>
     </footer>

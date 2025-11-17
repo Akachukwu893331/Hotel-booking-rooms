@@ -138,7 +138,6 @@
 
 
 import React, { useEffect, useState } from 'react';
-//import './RoomFilter.css';
 
 export default function RoomFilter({ ourRooms, setOurFilteredRooms }) {
   const [allowBreakfast, setAllowBreakfast] = useState(false);
@@ -189,9 +188,12 @@ export default function RoomFilter({ ourRooms, setOurFilteredRooms }) {
         <div className='wide-filter-header'>
           <div className='wide-title-section'>
             <h3 className='wide-filter-title'>Filter Rooms</h3>
-            <div className='price-display-wide'>Up to ${priceRange}</div>
+            <div className='price-display-wide'>
+              Up to ${priceRange}
+            </div>
           </div>
-          <button 
+          <button
+            type='button'
             className='clear-all-wide'
             onClick={clearAllFilters}
             disabled={roomType === 'all' && priceRange === 1000 && !allowBreakfast && !allowPets}
@@ -209,6 +211,7 @@ export default function RoomFilter({ ourRooms, setOurFilteredRooms }) {
               {roomTypeOptions.map(option => (
                 <button
                   key={option.value}
+                  type='button'
                   className={`wide-type-btn ${roomType === option.value ? 'active' : ''}`}
                   onClick={() => setRoomType(option.value)}
                 >
@@ -273,25 +276,25 @@ export default function RoomFilter({ ourRooms, setOurFilteredRooms }) {
             {roomType !== 'all' && (
               <span className='wide-active-tag'>
                 {roomTypeOptions.find(opt => opt.value === roomType)?.label}
-                <button onClick={() => setRoomType('all')}>×</button>
+                <button type='button' onClick={() => setRoomType('all')}>×</button>
               </span>
             )}
             {priceRange < 1000 && (
               <span className='wide-active-tag'>
                 Under ${priceRange}
-                <button onClick={() => setPriceRange(1000)}>×</button>
+                <button type='button' onClick={() => setPriceRange(1000)}>×</button>
               </span>
             )}
             {allowBreakfast && (
               <span className='wide-active-tag'>
                 Breakfast
-                <button onClick={() => setAllowBreakfast(false)}>×</button>
+                <button type='button' onClick={() => setAllowBreakfast(false)}>×</button>
               </span>
             )}
             {allowPets && (
               <span className='wide-active-tag'>
                 Pets
-                <button onClick={() => setAllowPets(false)}>×</button>
+                <button type='button' onClick={() => setAllowPets(false)}>×</button>
               </span>
             )}
             {(roomType === 'all' && priceRange === 1000 && !allowBreakfast && !allowPets) && (

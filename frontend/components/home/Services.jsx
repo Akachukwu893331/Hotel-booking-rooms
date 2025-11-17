@@ -47,8 +47,6 @@
 
 
 
-
-
 import React from 'react';
 import { v4 as uniqueId } from 'uuid';
 import services from '../../data/service';
@@ -56,12 +54,12 @@ import Title from './Title';
 
 function Services() {
   return (
-    <section className="services">
-      <Title title="Our Premium Services" />
+    <section className='services'>
+      <Title title='Our Premium Services' />
 
-      <div className="services-center">
+      <div className='services-center'>
         {services?.map((item) => (
-          <article key={uniqueId()} className="service">
+          <article key={uniqueId()} className='service'>
             <span>{item.icon}</span>
             <h6>{item.title}</h6>
             <p>{item.info}</p>

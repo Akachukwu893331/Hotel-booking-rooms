@@ -79,15 +79,22 @@ export default function RoomList({ rooms = [] }) {
                 className='room-list-img'
               />
               <div className='room-list-price'>
-                ${room?.room_price ?? 'N/A'}/night
+                {room?.room_price ?? 'N/A'}
+                /night
               </div>
-              <div className='room-list-type'>{room?.room_type || 'Unknown Type'}</div>
+              <div className='room-list-type'>
+                {room?.room_type || 'Unknown Type'}
+              </div>
             </div>
             <div className='room-list-info'>
-              <h4 className='room-list-name'>{room?.room_name || 'Unnamed Room'}</h4>
+              <h4 className='room-list-name'>
+                {room?.room_name || 'Unnamed Room'}
+              </h4>
               <p className='room-list-desc'>
                 {room?.room_description
-                  ? `${room.room_description.slice(0, 80)}${room.room_description.length > 80 ? '...' : ''}`
+                  ? `${room.room_description.slice(0, 80)}${
+                      room.room_description.length > 80 ? '...' : ''
+                    }`
                   : 'No description available'}
               </p>
               <Link
@@ -107,7 +114,10 @@ export default function RoomList({ rooms = [] }) {
           {[...Array(totalPages)].map((_, index) => (
             <button
               key={uniqueId()}
-              className={`room-list-page-btn ${currentPage === index + 1 ? 'active' : ''}`}
+              type='button'
+              className={`room-list-page-btn ${
+                currentPage === index + 1 ? 'active' : ''
+              }`}
               onClick={() => handlePageChange(index + 1)}
             >
               {index + 1}
@@ -118,3 +128,4 @@ export default function RoomList({ rooms = [] }) {
     </section>
   );
 }
+
