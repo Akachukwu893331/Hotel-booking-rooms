@@ -75,14 +75,20 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-// Folder path helper
+// Helper to get upload path
 const uploadPath = () => {
-  // Absolute path based on current file location
+  // Use absolute path based on this file's location
   const UPLOADS_FOLDER = path.join(__dirname, '../../public/uploads/rooms');
 
-  // Create folder recursively if it doesn't exist
-  if (!fs.existsSync(UPLOADS_FOLDER)) {
-    fs.mkdirSync(UPLOADS_FOLDER, { recursive: true });
+  try {
+    // Create folder recursively if it doesn't exist
+    if (!fs.existsSync(UPLOADS_FOLDER)) {
+      fs.mkdirSync(UPLOADS_FOLDER, { recursive: true });
+      console.log('Created uploads folder:', UPLOADS_FOLDER);
+    }
+  } catch (err) {
+    console.error('Error creating upload folder:', err);
+    throw err; // stop if folder can't be created
   }
 
   return UPLOADS_FOLDER;
@@ -100,7 +106,6 @@ const storage = multer.diskStorage({
       .toLowerCase()
       .split(' ')
       .join('-')}-${Date.now()}`;
-
     cb(null, fileName + fileExt);
   },
 });
@@ -109,10 +114,11 @@ const storage = multer.diskStorage({
 const roomImageUpload = multer({
   storage,
   limits: {
-    fileSize: 1000000, // 1MB
+    fileSize: 1 * 1024 * 1024, // 1MB
   },
   fileFilter: (_req, file, cb) => {
     const allowedTypes = ['image/png', 'image/jpg', 'image/jpeg'];
+
     if (file.fieldname === 'room_images') {
       if (allowedTypes.includes(file.mimetype)) {
         cb(null, true);
@@ -126,3 +132,13 @@ const roomImageUpload = multer({
 });
 
 module.exports = roomImageUpload;
+
+
+
+
+
+
+
+
+
+
