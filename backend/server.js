@@ -118,64 +118,58 @@
 
 
 
-require('dotenv').config(); // Load .env variables
-
+require('dotenv').config();
 const express = require('express');
 const morgan = require('morgan');
-const cors = require('cors'); // <-- ADD THIS
 const connectDatabase = require('./src/database/connect.mongo.db');
 const logger = require('./src/middleware/winston.logger');
-const app = require('./src/app');
 
-const PORT = process.env.APP_PORT || 3035;
+const app = express();
 
-// -----------------------------------------------
-// ✅ FIX CORS for Vercel Deployment
-// -----------------------------------------------
+// -----------------------------
+// Middleware
+// -----------------------------
+app.use(express.json());
+app.use(morgan('dev'));
+
+// -----------------------------
+// CORS Setup for Vercel
+// -----------------------------
 const allowedOrigins = [
-  "https://hotel-booking-rooms-frontend.vercel.app",
-  "https://hotel-booking-rooms-admin.vercel.app",
+  "https://hotel-booking-rooms-beach-resort.vercel.app", // frontend
+  "https://hotel-booking-rooms-admin.vercel.app",       // admin
 ];
 
-app.use(cors({
-  origin: function (origin, callback) {
-    // Allow non-browser tools (like Postman)
-    if (!origin) return callback(null, true);
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (!origin || allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin || "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE,OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+  }
 
-    if (allowedOrigins.includes(origin)) {
-      return callback(null, true);
-    } else {
-      return callback(new Error("CORS blocked for origin: " + origin));
-    }
-  },
-  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true
-}));
+  // Handle preflight
+  if (req.method === "OPTIONS") return res.sendStatus(200);
 
-// IMPORTANT: Preflight OPTIONS handler (Fix for Vercel)
-app.options("*", (req, res) => {
-  res.setHeader("Access-Control-Allow-Origin", req.headers.origin);
-  res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE,OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  res.status(200).end();
+  next();
 });
 
-// -----------------------------------------------
-// DB Connection
-// -----------------------------------------------
+// -----------------------------
+// Connect to Database
+// -----------------------------
 connectDatabase()
   .then(() => logger.info('MongoDB connection established successfully'))
   .catch((err) => logger.error('MongoDB connection failed:', err));
 
-// -----------------------------------------------
-// Logger
-// -----------------------------------------------
-app.use(morgan('dev'));
+// -----------------------------
+// Your Routes
+// -----------------------------
+app.use('/api/v1/auth', require('./src/routes/auth.routes'));
 
-// -----------------------------------------------
+// -----------------------------
 // Global Error Handler
-// -----------------------------------------------
+// -----------------------------
 app.use((err, req, res, next) => {
   logger.error('Unhandled Error:', err);
 
@@ -186,9 +180,14 @@ app.use((err, req, res, next) => {
   });
 });
 
-// -----------------------------------------------
-// Local Server Start (NOT used on Vercel)
-// -----------------------------------------------
-app.listen(PORT, () => {
-  logger.info(`Server running at: ${process.env.APP_BASE_URL}`);
-});
+// -----------------------------
+// Local server (remove on Vercel)
+// -----------------------------
+if (process.env.APP_NODE_ENV !== 'production') {
+  const PORT = process.env.APP_PORT || 3035;
+  app.listen(PORT, () => {
+    logger.info(`Server running locally at: http://localhost:${PORT}`);
+  });
+}
+
+module.exports = app; // for Vercel serverless
