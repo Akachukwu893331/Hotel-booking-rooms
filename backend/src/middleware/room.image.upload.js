@@ -64,70 +64,29 @@
 
 
 
-
-
-
-
-
-
-
 // const multer = require('multer');
-// const path = require('path');
-// const fs = require('fs');
+// const { CloudinaryStorage } = require('multer-storage-cloudinary');
+// const cloudinary = require('../config/cloudinary');
 
-// // Helper to get upload path
-// const uploadPath = () => {
-//   // Use absolute path based on this file's location
-//   const UPLOADS_FOLDER = path.join(__dirname, '../../public/uploads/rooms');
-
-//   try {
-//     // Create folder recursively if it doesn't exist
-//     if (!fs.existsSync(UPLOADS_FOLDER)) {
-//       fs.mkdirSync(UPLOADS_FOLDER, { recursive: true });
-//       console.log('Created uploads folder:', UPLOADS_FOLDER);
-//     }
-//   } catch (err) {
-//     console.error('Error creating upload folder:', err);
-//     throw err; // stop if folder can't be created
-//   }
-
-//   return UPLOADS_FOLDER;
-// };
-
-// // Multer storage configuration
-// const storage = multer.diskStorage({
-//   destination: (_req, _file, cb) => {
-//     cb(null, uploadPath());
-//   },
-//   filename: (_req, file, cb) => {
-//     const fileExt = path.extname(file.originalname);
-//     const fileName = `${file.originalname
-//       .replace(fileExt, '')
-//       .toLowerCase()
-//       .split(' ')
-//       .join('-')}-${Date.now()}`;
-//     cb(null, fileName + fileExt);
+// // Configure Cloudinary storage
+// const storage = new CloudinaryStorage({
+//   cloudinary: cloudinary,
+//   params: {
+//     folder: 'rooms', // Cloudinary folder
+//     format: async (req, file) => 'jpg', // convert all images to jpg
+//     public_id: (req, file) =>
+//       `${file.originalname.replace(/\.[^/.]+$/, '').toLowerCase().split(' ').join('-')}-${Date.now()}`,
 //   },
 // });
 
-// // Multer upload object
+// // Multer upload instance
 // const roomImageUpload = multer({
 //   storage,
-//   limits: {
-//     fileSize: 1 * 1024 * 1024, // 1MB
-//   },
+//   limits: { fileSize: 1 * 1024 * 1024 }, // 1MB
 //   fileFilter: (_req, file, cb) => {
 //     const allowedTypes = ['image/png', 'image/jpg', 'image/jpeg'];
-
-//     if (file.fieldname === 'room_images') {
-//       if (allowedTypes.includes(file.mimetype)) {
-//         cb(null, true);
-//       } else {
-//         cb(new Error('Only .jpg, .png or .jpeg format allowed!'));
-//       }
-//     } else {
-//       cb(new Error('Unknown field!'));
-//     }
+//     if (!allowedTypes.includes(file.mimetype)) return cb(new Error('Only .jpg, .png or .jpeg allowed'));
+//     cb(null, true);
 //   },
 // });
 
@@ -142,53 +101,79 @@
 
 
 
+
 const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const cloudinaryModule = require('cloudinary');
 
-// Helper to get upload path
-const uploadPath = () => {
-  // Use /tmp for Vercel (writable during request)
-  const UPLOADS_FOLDER = path.join('/tmp/uploads/rooms');
+// === Cloudinary Config ===
+const cloudinary = cloudinaryModule.v2;
 
-  try {
-    // Create folder recursively if it doesn't exist
-    if (!fs.existsSync(UPLOADS_FOLDER)) {
-      fs.mkdirSync(UPLOADS_FOLDER, { recursive: true });
-      console.log('Uploads folder ready:', UPLOADS_FOLDER);
-    }
-  } catch (err) {
-    console.error('Failed to create uploads folder:', err);
-    throw err;
-  }
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
-  return UPLOADS_FOLDER;
-};
-
-// Multer storage configuration
-const storage = multer.diskStorage({
-  destination: (_req, _file, cb) => cb(null, uploadPath()),
-  filename: (_req, file, cb) => {
-    const ext = path.extname(file.originalname);
-    const name = `${file.originalname
-      .replace(ext, '')
-      .toLowerCase()
-      .split(' ')
-      .join('-')}-${Date.now()}${ext}`;
-    cb(null, name);
+// === Cloudinary Storage ===
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: 'rooms',
+    format: async () => 'jpg', // Convert all uploaded images to JPG
+    public_id: (req, file) =>
+      `${file.originalname.replace(/\.[^/.]+$/, '')
+        .toLowerCase()
+        .split(' ')
+        .join('-')}-${Date.now()}`,
   },
 });
 
-// Multer upload instance
+// ❌ Blocked types
+const blockedTypes = [
+  'image/gif',
+  'image/svg+xml',
+  'image/bmp',
+  'image/tiff',
+  'image/tif',
+  'image/heic',
+  'image/heif',
+  'image/jfif' // new addition
+];
+
+// === Multer Upload ===
 const roomImageUpload = multer({
   storage,
-  limits: { fileSize: 1 * 1024 * 1024 }, // 1MB
-  fileFilter: (_req, file, cb) => {
-    const allowedTypes = ['image/png', 'image/jpg', 'image/jpeg'];
-    if (file.fieldname !== 'room_images') return cb(new Error('Unknown field!'));
-    if (!allowedTypes.includes(file.mimetype)) return cb(new Error('Only .jpg, .png, .jpeg allowed'));
+  limits: { fileSize: 10 * 1024 * 1024 }, // 10 MB limit
+  fileFilter: (req, file, cb) => {
+    if (blockedTypes.includes(file.mimetype)) {
+      return cb(
+        new Error(
+          'GIF, SVG, BMP, TIFF, HEIC, JFIF files are not allowed. Please upload JPG, PNG, WEBP, or AVIF.'
+        )
+      );
+    }
     cb(null, true);
   },
 });
 
 module.exports = roomImageUpload;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
