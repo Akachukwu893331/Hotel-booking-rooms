@@ -7,32 +7,114 @@
  *
  */
 
+// const router = require('express').Router();
+// const {
+//   getUser, updateUser, deleteUser, avatarUpdate, getUsersList, blockedUser, unblockedUser, getUserById, deleteUserById
+// } = require('../controllers/user.controllers');
+// const { isAuthenticatedUser, isAdmin, isBlocked } = require('../middleware/app.authentication');
+// const avatarUpload = require('../middleware/user.avatar.upload');
+
+// // get user info route
+// router.route('/get-user').get(isAuthenticatedUser, isBlocked, getUser);
+// router.route('/get-user/:id').get(isAuthenticatedUser, isBlocked, isAdmin, getUserById);
+
+// // update user info route
+// router.route('/update-user').put(isAuthenticatedUser, isBlocked, updateUser);
+
+// // user profile image/avatar update
+// router.route('/avatar-update').put(isAuthenticatedUser, isBlocked, avatarUpload.single('avatar'), avatarUpdate);
+
+// // delete user route
+// router.route('/delete-user').delete(isAuthenticatedUser, isBlocked, deleteUser);
+// router.route('/delete-user/:id').delete(isAuthenticatedUser, isBlocked, isAdmin, deleteUserById);
+
+// // get all users list for admin
+// router.route('/all-users-list').get(isAuthenticatedUser, isBlocked, isAdmin, getUsersList);
+
+// // blocked/unblocked user using id by admin
+// router.route('/blocked-user/:id').put(isAuthenticatedUser, isBlocked, isAdmin, blockedUser);
+// router.route('/unblocked-user/:id').put(isAuthenticatedUser, isBlocked, isAdmin, unblockedUser);
+
+// module.exports = router;
+
+
+
+
+
+
+
+
+
 const router = require('express').Router();
 const {
-  getUser, updateUser, deleteUser, avatarUpdate, getUsersList, blockedUser, unblockedUser, getUserById, deleteUserById
+  getUser,
+  updateUser,
+  deleteUser,
+  avatarUpdate,
+  getUsersList,
+  blockedUser,
+  unblockedUser,
+  getUserById,
+  deleteUserById
 } = require('../controllers/user.controllers');
+
 const { isAuthenticatedUser, isAdmin, isBlocked } = require('../middleware/app.authentication');
-const avatarUpload = require('../middleware/user.avatar.upload');
+const avatarUpload = require('../middleware/user.avatar.upload'); // Cloudinary version
 
-// get user info route
-router.route('/get-user').get(isAuthenticatedUser, isBlocked, getUser);
-router.route('/get-user/:id').get(isAuthenticatedUser, isBlocked, isAdmin, getUserById);
+// ==========================
+// User Info Routes
+// ==========================
 
-// update user info route
-router.route('/update-user').put(isAuthenticatedUser, isBlocked, updateUser);
+// Get current user info
+router.route('/get-user')
+  .get(isAuthenticatedUser, isBlocked, getUser);
 
-// user profile image/avatar update
-router.route('/avatar-update').put(isAuthenticatedUser, isBlocked, avatarUpload.single('avatar'), avatarUpdate);
+// Get user info by ID (admin only)
+router.route('/get-user/:id')
+  .get(isAuthenticatedUser, isBlocked, isAdmin, getUserById);
 
-// delete user route
-router.route('/delete-user').delete(isAuthenticatedUser, isBlocked, deleteUser);
-router.route('/delete-user/:id').delete(isAuthenticatedUser, isBlocked, isAdmin, deleteUserById);
+// ==========================
+// User Update Routes
+// ==========================
 
-// get all users list for admin
-router.route('/all-users-list').get(isAuthenticatedUser, isBlocked, isAdmin, getUsersList);
+// Update current user info
+router.route('/update-user')
+  .put(isAuthenticatedUser, isBlocked, updateUser);
 
-// blocked/unblocked user using id by admin
-router.route('/blocked-user/:id').put(isAuthenticatedUser, isBlocked, isAdmin, blockedUser);
-router.route('/unblocked-user/:id').put(isAuthenticatedUser, isBlocked, isAdmin, unblockedUser);
+// Update user avatar/profile image
+router.route('/avatar-update')
+  .put(
+    isAuthenticatedUser,
+    isBlocked,
+    avatarUpload.single('avatar'), // Cloudinary middleware
+    avatarUpdate
+  );
+
+// ==========================
+// User Delete Routes
+// ==========================
+
+// Delete current user
+router.route('/delete-user')
+  .delete(isAuthenticatedUser, isBlocked, deleteUser);
+
+// Delete user by ID (admin only)
+router.route('/delete-user/:id')
+  .delete(isAuthenticatedUser, isBlocked, isAdmin, deleteUserById);
+
+// ==========================
+// Admin: Users Management
+// ==========================
+
+// Get all users (admin only)
+router.route('/all-users-list')
+  .get(isAuthenticatedUser, isBlocked, isAdmin, getUsersList);
+
+// Block / unblock user by ID (admin only)
+router.route('/blocked-user/:id')
+  .put(isAuthenticatedUser, isBlocked, isAdmin, blockedUser);
+
+router.route('/unblocked-user/:id')
+  .put(isAuthenticatedUser, isBlocked, isAdmin, unblockedUser);
 
 module.exports = router;

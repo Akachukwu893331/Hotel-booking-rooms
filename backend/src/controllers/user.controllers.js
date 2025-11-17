@@ -36,7 +36,8 @@ exports.getUser = async (req, res) => {
         fullName: user.fullName,
         email: user.email,
         phone: user.phone,
-        avatar: process.env.APP_BASE_URL + user.avatar,
+        // avatar: process.env.APP_BASE_URL + user.avatar,
+        avatar: user.avatar,
         gender: user.gender,
         dob: user.dob,
         address: user.address,
@@ -80,7 +81,8 @@ exports.getUserById = async (req, res) => {
         fullName: user.fullName,
         email: user.email,
         phone: user.phone,
-        avatar: process.env.APP_BASE_URL + user.avatar,
+        // avatar: process.env.APP_BASE_URL + user.avatar,
+        avatar: user.avatar,
         gender: user.gender,
         dob: user.dob,
         address: user.address,
@@ -135,7 +137,8 @@ exports.updateUser = async (req, res) => {
           fullName: updatedUser.fullName,
           email: updatedUser.email,
           phone: updatedUser.phone,
-          avatar: process.env.APP_BASE_URL + updatedUser.avatar,
+          // avatar: process.env.APP_BASE_URL + updatedUser.avatar,
+          avatar: updatedUser.avatar,
           gender: updatedUser.gender,
           dob: updatedUser.dob,
           address: updatedUser.address,
@@ -190,73 +193,116 @@ exports.updateUser = async (req, res) => {
 };
 
 // TODO: Controller for update user avatar/image
+// exports.avatarUpdate = async (req, res) => {
+//   try {
+//     const { user, file } = req;
+
+//     if (!user) {
+//       return res.status(404).json(errorResponse(
+//         4,
+//         'UNKNOWN ACCESS',
+//         'User does not exist'
+//       ));
+//     }
+
+//     if (file) {
+//       // if find to delete user old avatar
+//       if (user?.avatar?.includes('/uploads/users')) {
+//         fs.unlink(`${appRoot}/public/${user.avatar}`, (err) => {
+//           if (err) { logger.error(err); }
+//         });
+//       }
+
+//       // update user info & save database
+//       const updatedUser = await User.findByIdAndUpdate(
+//         user._id,
+//         { avatar: `/uploads/users/${file.filename}` },
+//         { runValidators: true, new: true }
+//       );
+
+//       res.status(200).json(successResponse(
+//         0,
+//         'SUCCESS',
+//         'User avatar updated successful',
+//         {
+//           userName: updatedUser.userName,
+//           fullName: updatedUser.fullName,
+//           email: updatedUser.email,
+//           phone: updatedUser.phone,
+//           avatar: process.env.APP_BASE_URL + updatedUser.avatar,
+//           gender: updatedUser.gender,
+//           dob: updatedUser.dob,
+//           address: updatedUser.address,
+//           role: updatedUser.role,
+//           verified: updatedUser.verified,
+//           status: updatedUser.status,
+//           createdAt: updatedUser.createdAt,
+//           updatedAt: updatedUser.updatedAt
+//         }
+//       ));
+//     } else {
+//       return res.status(400).json(errorResponse(
+//         1,
+//         'FAILED',
+//         'User `avatar` field is required'
+//       ));
+//     }
+//   } catch (error) {
+//     // if any error delete uploaded avatar image
+//     if (req?.file?.filename) {
+//       fs.unlink(`${appRoot}/public/uploads/users/${req.file.filename}`, (err) => {
+//         if (err) { logger.error(err); }
+//       });
+//     }
+
+//     res.status(500).json(errorResponse(
+//       2,
+//       'SERVER SIDE ERROR',
+//       error
+//     ));
+//   }
+// };
 exports.avatarUpdate = async (req, res) => {
   try {
     const { user, file } = req;
 
     if (!user) {
-      return res.status(404).json(errorResponse(
-        4,
-        'UNKNOWN ACCESS',
-        'User does not exist'
-      ));
+      return res.status(404).json(errorResponse(4, 'UNKNOWN ACCESS', 'User does not exist'));
     }
 
-    if (file) {
-      // if find to delete user old avatar
-      if (user?.avatar?.includes('/uploads/users')) {
-        fs.unlink(`${appRoot}/public/${user.avatar}`, (err) => {
-          if (err) { logger.error(err); }
-        });
+    if (!file) {
+      return res.status(400).json(errorResponse(1, 'FAILED', 'User `avatar` field is required'));
+    }
+
+    // Update user avatar with Cloudinary URL
+    const updatedUser = await User.findByIdAndUpdate(
+      user._id,
+      { avatar: file.path },
+      { runValidators: true, new: true }
+    );
+
+    res.status(200).json(successResponse(
+      0,
+      'SUCCESS',
+      'User avatar updated successfully',
+      {
+        userName: updatedUser.userName,
+        fullName: updatedUser.fullName,
+        email: updatedUser.email,
+        phone: updatedUser.phone,
+        avatar: updatedUser.avatar,
+        gender: updatedUser.gender,
+        dob: updatedUser.dob,
+        address: updatedUser.address,
+        role: updatedUser.role,
+        verified: updatedUser.verified,
+        status: updatedUser.status,
+        createdAt: updatedUser.createdAt,
+        updatedAt: updatedUser.updatedAt
       }
-
-      // update user info & save database
-      const updatedUser = await User.findByIdAndUpdate(
-        user._id,
-        { avatar: `/uploads/users/${file.filename}` },
-        { runValidators: true, new: true }
-      );
-
-      res.status(200).json(successResponse(
-        0,
-        'SUCCESS',
-        'User avatar updated successful',
-        {
-          userName: updatedUser.userName,
-          fullName: updatedUser.fullName,
-          email: updatedUser.email,
-          phone: updatedUser.phone,
-          avatar: process.env.APP_BASE_URL + updatedUser.avatar,
-          gender: updatedUser.gender,
-          dob: updatedUser.dob,
-          address: updatedUser.address,
-          role: updatedUser.role,
-          verified: updatedUser.verified,
-          status: updatedUser.status,
-          createdAt: updatedUser.createdAt,
-          updatedAt: updatedUser.updatedAt
-        }
-      ));
-    } else {
-      return res.status(400).json(errorResponse(
-        1,
-        'FAILED',
-        'User `avatar` field is required'
-      ));
-    }
-  } catch (error) {
-    // if any error delete uploaded avatar image
-    if (req?.file?.filename) {
-      fs.unlink(`${appRoot}/public/uploads/users/${req.file.filename}`, (err) => {
-        if (err) { logger.error(err); }
-      });
-    }
-
-    res.status(500).json(errorResponse(
-      2,
-      'SERVER SIDE ERROR',
-      error
     ));
+  } catch (error) {
+    res.status(500).json(errorResponse(2, 'SERVER SIDE ERROR', error));
   }
 };
 
@@ -277,15 +323,26 @@ exports.deleteUser = async (req, res) => {
     await User.findByIdAndDelete(user.id);
 
     // user avatar image delete if available
-    if (user?.avatar) {
-      const userAvatar = user.avatar.includes('/uploads/users');
+    // if (user?.avatar) {
+    //   const userAvatar = user.avatar.includes('/uploads/users');
 
-      if (userAvatar) {
-        fs.unlink(`${appRoot}/public${user.avatar}`, (err) => {
-          if (err) {
-            logger.error(err.message);
-          }
+    //   if (userAvatar) {
+    //     fs.unlink(`${appRoot}/public${user.avatar}`, (err) => {
+    //       if (err) {
+    //         logger.error(err.message);
+    //       }
+    //     });
+    //   }
+    // }
+    if (user?.avatar) {
+      try {
+        // Assuming you store the full Cloudinary URL in user.avatar
+        const publicId = user.avatar.split('/').pop().split('.')[0]; // extract file name without extension
+        cloudinary.uploader.destroy(`hotel-users/${publicId}`, (error, result) => {
+          if (error) logger.error(error);
         });
+      } catch (err) {
+        logger.error(err);
       }
     }
 
@@ -329,15 +386,26 @@ exports.deleteUserById = async (req, res) => {
     await User.findByIdAndDelete(user.id);
 
     // user avatar image delete if available
-    if (user?.avatar) {
-      const userAvatar = user.avatar.includes('/uploads/users');
+    // if (user?.avatar) {
+    //   const userAvatar = user.avatar.includes('/uploads/users');
 
-      if (userAvatar) {
-        fs.unlink(`${appRoot}/public${user.avatar}`, (err) => {
-          if (err) {
-            logger.error(err.message);
-          }
+    //   if (userAvatar) {
+    //     fs.unlink(`${appRoot}/public${user.avatar}`, (err) => {
+    //       if (err) {
+    //         logger.error(err.message);
+    //       }
+    //     });
+    //   }
+    // }
+    if (user?.avatar) {
+      try {
+        // Assuming you store the full Cloudinary URL in user.avatar
+        const publicId = user.avatar.split('/').pop().split('.')[0]; // extract file name without extension
+        cloudinary.uploader.destroy(`hotel-users/${publicId}`, (error, result) => {
+          if (error) logger.error(error);
         });
+      } catch (err) {
+        logger.error(err);
       }
     }
 
@@ -389,7 +457,8 @@ exports.getUsersList = async (req, res) => {
       fullName: data.fullName,
       email: data.email,
       phone: data.phone,
-      avatar: process.env.APP_BASE_URL + data.avatar,
+      // avatar: process.env.APP_BASE_URL + data.avatar,
+      avatar: data.avatar,
       gender: data.gender,
       dob: data.dob,
       address: data.address,
@@ -467,7 +536,8 @@ exports.blockedUser = async (req, res) => {
         fullName: blockedUser.fullName,
         email: blockedUser.email,
         phone: blockedUser.phone,
-        avatar: process.env.APP_BASE_URL + blockedUser.avatar,
+        // avatar: process.env.APP_BASE_URL + blockedUser.avatar,
+        avatar: blockedUser.avatar,
         gender: blockedUser.gender,
         dob: blockedUser.dob,
         address: blockedUser.address,
@@ -533,7 +603,8 @@ exports.unblockedUser = async (req, res) => {
         fullName: unblockedUser.fullName,
         email: unblockedUser.email,
         phone: unblockedUser.phone,
-        avatar: process.env.APP_BASE_URL + unblockedUser.avatar,
+        // avatar: process.env.APP_BASE_URL + unblockedUser.avatar,
+        avatar: unblockedUser.avatar,
         gender: unblockedUser.gender,
         dob: unblockedUser.dob,
         address: unblockedUser.address,
