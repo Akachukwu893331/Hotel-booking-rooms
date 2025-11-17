@@ -76,25 +76,106 @@
 
 
 
-require('dotenv').config();   // Load .env variables
+// require('dotenv').config();   // Load .env variables
+
+// const express = require('express');
+// const morgan = require('morgan');
+// const connectDatabase = require('./src/database/connect.mongo.db');
+// const logger = require('./src/middleware/winston.logger');
+// const app = require('./src/app');
+
+// const PORT = process.env.APP_PORT || 3035;
+
+// // Connect to MongoDB
+// connectDatabase()
+//   .then(() => logger.info('MongoDB connection established successfully'))
+//   .catch((err) => logger.error('MongoDB connection failed:', err));
+
+// // HTTP Request Logger (console only — safe for all platforms)
+// app.use(morgan('dev'));
+
+// // Global error handler
+// app.use((err, req, res, next) => {
+//   logger.error('Unhandled Error:', err);
+
+//   res.status(err.status || 500).json({
+//     success: false,
+//     message: err.message || 'Internal Server Error',
+//     stack: process.env.APP_NODE_ENV === 'development' ? err.stack : undefined
+//   });
+// });
+
+// // Start the server (NOT FOR VERCEL)
+// app.listen(PORT, () => {
+//   logger.info(`Server running at: ${process.env.APP_BASE_URL}`);
+// });
+
+
+
+
+
+
+
+
+
+require('dotenv').config(); // Load .env variables
 
 const express = require('express');
 const morgan = require('morgan');
+const cors = require('cors'); // <-- ADD THIS
 const connectDatabase = require('./src/database/connect.mongo.db');
 const logger = require('./src/middleware/winston.logger');
 const app = require('./src/app');
 
 const PORT = process.env.APP_PORT || 3035;
 
-// Connect to MongoDB
+// -----------------------------------------------
+// ✅ FIX CORS for Vercel Deployment
+// -----------------------------------------------
+const allowedOrigins = [
+  "https://hotel-booking-rooms-frontend.vercel.app",
+  "https://hotel-booking-rooms-admin.vercel.app",
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    // Allow non-browser tools (like Postman)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    } else {
+      return callback(new Error("CORS blocked for origin: " + origin));
+    }
+  },
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true
+}));
+
+// IMPORTANT: Preflight OPTIONS handler (Fix for Vercel)
+app.options("*", (req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", req.headers.origin);
+  res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE,OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.status(200).end();
+});
+
+// -----------------------------------------------
+// DB Connection
+// -----------------------------------------------
 connectDatabase()
   .then(() => logger.info('MongoDB connection established successfully'))
   .catch((err) => logger.error('MongoDB connection failed:', err));
 
-// HTTP Request Logger (console only — safe for all platforms)
+// -----------------------------------------------
+// Logger
+// -----------------------------------------------
 app.use(morgan('dev'));
 
-// Global error handler
+// -----------------------------------------------
+// Global Error Handler
+// -----------------------------------------------
 app.use((err, req, res, next) => {
   logger.error('Unhandled Error:', err);
 
@@ -105,7 +186,9 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Start the server (NOT FOR VERCEL)
+// -----------------------------------------------
+// Local Server Start (NOT used on Vercel)
+// -----------------------------------------------
 app.listen(PORT, () => {
   logger.info(`Server running at: ${process.env.APP_BASE_URL}`);
 });
