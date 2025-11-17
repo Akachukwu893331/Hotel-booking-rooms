@@ -30,72 +30,135 @@
 
 // export default Footers;
 
+// import React from 'react';
+// import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from 'react-icons/fa';
 
+// function Footers() {
+//   return (
+//     <footer className='footer'>
+//       <div className='footer-container'>
+//         {/* About */}
+//         <div>
+//           <h3>Beach Resort</h3>
+//           <p>
+//             Experience luxury and comfort at our beachfront paradise. Private suites, premium dining, and unforgettable experiences await.
+//           </p>
+//           <div className='social-icons'>
+//             <a href='#' aria-label='Facebook'>
+//               <FaFacebookF />
+//             </a>
+//             <a href='#' aria-label='Twitter'>
+//               <FaTwitter />
+//             </a>
+//             <a href='#' aria-label='Instagram'>
+//               <FaInstagram />
+//             </a>
+//             <a href='#' aria-label='LinkedIn'>
+//               <FaLinkedinIn />
+//             </a>
+//           </div>
+//         </div>
 
+//         {/* Quick Links */}
+//         <div>
+//           <h3>Quick Links</h3>
+//           <ul>
+//             <li>
+//               <a href='/'>Home</a>
+//             </li>
+//             <li>
+//               <a href='/rooms'>Rooms</a>
+//             </li>
+//             <li>
+//               <a href='/about'>About Us</a>
+//             </li>
+//             <li>
+//               <a href='/contact'>Contact</a>
+//             </li>
+//           </ul>
+//         </div>
 
+//         {/* Contact */}
+//         <div>
+//           <h3>Contact Us</h3>
+//           <ul>
+//             <li>Email: info@beachresort.com</li>
+//             <li>Phone: +1 234 567 890</li>
+//             <li>Address: 123 Ocean Drive, Miami, FL</li>
+//           </ul>
+//         </div>
 
+//         {/* Newsletter */}
+//         <div>
+//           <h3>Newsletter</h3>
+//           <p>Subscribe to get our latest offers and updates</p>
+//           <div className='newsletter'>
+//             <input type='email' placeholder='Your email' />
+//             <button type='button'>Subscribe</button>
+//           </div>
+//         </div>
+//       </div>
 
+//       <div className='footer-bottom'>
+//         ©2025 Beach Resort. Designed with ❤️ for luxury and comfort.
+//       </div>
+//     </footer>
+//   );
+// }
 
-
-
-
-
-
-
-
-
-
-
+// export default Footers;
 
 import React from 'react';
-import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from 'react-icons/fa';
+import Link from 'next/link';
+import {
+  FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn
+} from 'react-icons/fa';
 
 function Footers() {
   return (
     <footer className='footer'>
       <div className='footer-container'>
-        {/* About */}
         <div>
           <h3>Beach Resort</h3>
           <p>
-            Experience luxury and comfort at our beachfront paradise. Private suites, premium dining, and unforgettable experiences await.
+            Experience luxury and comfort at our beachfront paradise. Private suites,
+            premium dining, and unforgettable experiences await.
           </p>
+
           <div className='social-icons'>
-            <a href='#' aria-label='Facebook'>
+            <button type='button' aria-label='Facebook' className='social-btn'>
               <FaFacebookF />
-            </a>
-            <a href='#' aria-label='Twitter'>
+            </button>
+            <button type='button' aria-label='Twitter' className='social-btn'>
               <FaTwitter />
-            </a>
-            <a href='#' aria-label='Instagram'>
+            </button>
+            <button type='button' aria-label='Instagram' className='social-btn'>
               <FaInstagram />
-            </a>
-            <a href='#' aria-label='LinkedIn'>
+            </button>
+            <button type='button' aria-label='LinkedIn' className='social-btn'>
               <FaLinkedinIn />
-            </a>
+            </button>
           </div>
         </div>
 
-        {/* Quick Links */}
         <div>
           <h3>Quick Links</h3>
           <ul>
             <li>
-              <a href='/'>Home</a>
+              <Link href='/'>Home</Link>
             </li>
             <li>
-              <a href='/rooms'>Rooms</a>
+              <Link href='/rooms'>Rooms</Link>
             </li>
             <li>
-              <a href='/about'>About Us</a>
+              <Link href='/about'>About Us</Link>
             </li>
             <li>
-              <a href='/contact'>Contact</a>
+              <Link href='/contact'>Contact</Link>
             </li>
           </ul>
         </div>
 
-        {/* Contact */}
         <div>
           <h3>Contact Us</h3>
           <ul>
@@ -105,7 +168,6 @@ function Footers() {
           </ul>
         </div>
 
-        {/* Newsletter */}
         <div>
           <h3>Newsletter</h3>
           <p>Subscribe to get our latest offers and updates</p>

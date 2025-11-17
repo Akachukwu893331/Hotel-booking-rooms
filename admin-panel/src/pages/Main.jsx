@@ -233,7 +233,7 @@ function Main() {
         </Content>
 
         <Footer className='text-center font-text-font font-medium '>
-          ©2025 Beach Resort — Developed By
+          ©2025 Beach Resort — Designed with
           {' '}
           <a
             className='text-color-primary hover:text-color-secondary'
@@ -241,7 +241,7 @@ function Main() {
             target='_blank'
             rel='noreferrer'
           >
-            Daniel
+            ❤️ for luxury and comfort.
           </a>
         </Footer>
       </Layout>

@@ -7,8 +7,8 @@
  *
  */
 
-import { 
-  FaSun, FaGlassMartiniAlt, FaHotel, FaDumbbell 
+import {
+  FaSun, FaGlassMartiniAlt, FaHotel
 } from 'react-icons/fa';
 
 const services = [
@@ -27,12 +27,7 @@ const services = [
     title: 'Premium Suites',
     info: 'Stay in elegantly designed suites with panoramic ocean views, plush bedding, private balconies, and all modern amenities for the ultimate comfort.'
   }
-  // {
-  //   icon: <FaDumbbell />,
-  //   title: 'Wellness & Fitness Center',
-  //   info: 'Maintain your fitness routine in our state-of-the-art gym or join yoga and meditation sessions designed to rejuvenate your body and mind.'
-  // }
+
 ];
 
 export default services;
-
