@@ -126,12 +126,12 @@ const morgan = require('morgan');
 const connectDatabase = require('./src/database/connect.mongo.db');
 const logger = require('./src/middleware/winston.logger');
 
-const app = require('./src/app'); // Already includes routes & express.json
+const app = require('./src/app'); // Express app with routes included
 const PORT = process.env.APP_PORT || 3035;
 
-// ---------------------------------------------
-// CORS Setup (Works for Local + Production)
-// ---------------------------------------------
+// ----------------------------------------------------
+// CORS Setup (Safe for Local + Vercel)
+// ----------------------------------------------------
 const allowedOrigins = [
   "http://localhost:3033",
   "https://hotel-booking-rooms-beach-resort.vercel.app",
@@ -139,35 +139,36 @@ const allowedOrigins = [
 ];
 
 app.use((req, res, next) => {
-  const origin = req.headers.origin;
+  const origin = req.headers.origin || "";
 
-  if (!origin || allowedOrigins.includes(origin)) {
-    res.setHeader("Access-Control-Allow-Origin", origin || "*");
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
     res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE,OPTIONS");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
     res.setHeader("Access-Control-Allow-Credentials", "true");
   }
 
+  // Preflight always OK
   if (req.method === "OPTIONS") return res.sendStatus(200);
 
   next();
 });
 
-// ---------------------------------------------
-// HTTP Request Logger (shows like Nginx logs)
-// ---------------------------------------------
-app.use(morgan("combined"));  // like your example logs
+// ----------------------------------------------------
+// HTTP Request Logger (Nginx-style output)
+// ----------------------------------------------------
+app.use(morgan("combined"));
 
-// ---------------------------------------------
-// Connect to MongoDB
-// ---------------------------------------------
+// ----------------------------------------------------
+// MongoDB Connection
+// ----------------------------------------------------
 connectDatabase()
   .then(() => logger.info("✅ Connection to MongoDB established successfully!"))
   .catch((err) => logger.error("❌ MongoDB connection failed:", err));
 
-// ---------------------------------------------
+// ----------------------------------------------------
 // Global Error Handler
-// ---------------------------------------------
+// ----------------------------------------------------
 app.use((err, req, res, next) => {
   logger.error("Unhandled Error:", err);
 
@@ -178,16 +179,16 @@ app.use((err, req, res, next) => {
   });
 });
 
-// ---------------------------------------------
-// Local Development Server (NOT used in Vercel)
-// ---------------------------------------------
-if (process.env.APP_NODE_ENV !== "production") {
+// ----------------------------------------------------
+// Local Server (Disabled on Vercel)
+// ----------------------------------------------------
+if (!process.env.VERCEL) {
   app.listen(PORT, () => {
     logger.info(`Server running at: http://localhost:${PORT}`);
   });
 }
 
-// ---------------------------------------------
-// Export app for Vercel
-// ---------------------------------------------
+// ----------------------------------------------------
+// Export app for Vercel serverless
+// ----------------------------------------------------
 module.exports = app;
