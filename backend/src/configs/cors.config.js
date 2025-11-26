@@ -1,30 +1,69 @@
-/**
- * @name Hotel Room Booking System
- * @author Md. Samiur Rahman (Mukul)
- * @description Hotel Room Booking and Management System Software ~ Developed By Md. Samiur Rahman (Mukul)
- * @copyright ©2023 ― Md. Samiur Rahman (Mukul). All rights reserved.
- * @version v0.0.1
- *
- */
+
+
+// const allowedOrigins = [
+//   'http://localhost:3033',
+//   'http://localhost:3034',
+//   'http://localhost:5500',
+//   'https://api-beach-resort.srmukul.com',
+//   'https://admin-beach-resort.vercel.app',
+//   'https://mukul-beach-resort.vercel.app'
+// ];
+
+// const corsOptions = {
+//   origin: (origin, callback) => {
+//     if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+//       callback(null, true);
+//     } else {
+//       callback(new Error('Not allowed by CORS origin'));
+//     }
+//   },
+//   credentials: true,
+//   optionsSuccessStatus: 200
+// };
+
+// module.exports = corsOptions;
+
+
+
+
+
+
+
+
+
+
+
 
 const allowedOrigins = [
-  'http://localhost:3033',
-  'http://localhost:3034',
-  'http://localhost:5500',
-  'https://api-beach-resort.srmukul.com',
-  'https://admin-beach-resort.vercel.app',
-  'https://mukul-beach-resort.vercel.app'
+  // Local development
+  "http://localhost:3033",
+  "http://localhost:3034",
+  "http://localhost:5500",
+
+  // Production: frontend
+  "https://hotel-booking-rooms-beach-resort.vercel.app",
+
+  // Production: admin panel
+  "https://hotel-booking-rooms-admin.vercel.app",
+
+  // Production: backend hosted on Vercel
+  "https://hotel-booking-rooms-backend.vercel.app"
 ];
 
 const corsOptions = {
   origin: (origin, callback) => {
-    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+    if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS origin'));
+      callback(new Error("Not allowed by CORS origin"));
     }
   },
+
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
+
+  preflightContinue: false,
   optionsSuccessStatus: 200
 };
 

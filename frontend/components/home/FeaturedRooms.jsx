@@ -16,7 +16,7 @@ function FeaturedRooms({ featuredRoom = [] }) {
             {/* Price + Type */}
             <div className='featured-top'>
               <span className='featured-price'>
-                $
+                 ₦
                 {room.room_price}
                 /night
               </span>
