@@ -38,7 +38,7 @@ const allowedOrigins = [
   // Local development
   "http://localhost:3033",
   "http://localhost:3034",
-  "http://localhost:5500",
+  "http://localhost:3035",
 
   // Production: frontend
   "https://hotel-booking-rooms-beach-resort.vercel.app",
