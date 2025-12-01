@@ -157,7 +157,7 @@ export default function RoomList({ rooms = [] }) {
                 className='room-list-img'
               />
               <div className='room-list-price'>
-                $
+                ₦
                 {room?.room_price ?? 'N/A'}
                 /night
               </div>

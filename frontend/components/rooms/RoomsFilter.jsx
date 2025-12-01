@@ -182,7 +182,7 @@ import React, { useEffect, useState } from 'react';
 export default function RoomFilter({ ourRooms, setOurFilteredRooms }) {
   const [allowBreakfast, setAllowBreakfast] = useState(false);
   const [allowPets, setAllowPets] = useState(false);
-  const [priceRange, setPriceRange] = useState(1000);
+  const [priceRange, setPriceRange] = useState(500000); // updated default to max ₦500,000
   const [roomType, setRoomType] = useState('all');
 
   useEffect(() => {
@@ -223,7 +223,7 @@ export default function RoomFilter({ ourRooms, setOurFilteredRooms }) {
 
   const clearAllFilters = () => {
     setRoomType('all');
-    setPriceRange(1000);
+    setPriceRange(500000); // updated default to max ₦500,000
     setAllowBreakfast(false);
     setAllowPets(false);
   };
@@ -237,7 +237,7 @@ export default function RoomFilter({ ourRooms, setOurFilteredRooms }) {
             <div className='price-display-wide'>
               Up to
               <br />
-              $
+              ₦
               {priceRange}
             </div>
           </div>
@@ -247,7 +247,7 @@ export default function RoomFilter({ ourRooms, setOurFilteredRooms }) {
             onClick={clearAllFilters}
             disabled={
               roomType === 'all'
-              && priceRange === 1000
+              && priceRange === 500000
               && !allowBreakfast
               && !allowPets
             }
@@ -282,16 +282,16 @@ export default function RoomFilter({ ourRooms, setOurFilteredRooms }) {
               <input
                 className='wide-slider'
                 type='range'
-                min={100}
-                max={1000}
-                step={50}
+                min={20000}   // updated min ₦20,000
+                max={500000}  // updated max ₦500,000
+                step={1000}   // optional: step increased for smoother range
                 value={priceRange}
                 onChange={(e) => setPriceRange(parseInt(e.target.value, 10))}
               />
               <div className='wide-slider-labels'>
-                <span>$100</span>
-                <span>$500</span>
-                <span>$1000</span>
+                <span>₦20,000</span>
+                <span>₦250,000</span>
+                <span>₦500,000</span>
               </div>
             </div>
           </div>
@@ -334,13 +334,13 @@ export default function RoomFilter({ ourRooms, setOurFilteredRooms }) {
               </span>
             )}
 
-            {priceRange < 1000 && (
+            {priceRange < 500000 && (  // updated comparison to match new max
               <span className='wide-active-tag'>
                 Under
                 <br />
-                $
+                ₦
                 {priceRange}
-                <button type='button' onClick={() => setPriceRange(1000)}>
+                <button type='button' onClick={() => setPriceRange(500000)}>
                   ×
                 </button>
               </span>
@@ -365,7 +365,7 @@ export default function RoomFilter({ ourRooms, setOurFilteredRooms }) {
             )}
 
             {roomType === 'all'
-              && priceRange === 1000
+              && priceRange === 500000
               && !allowBreakfast
               && !allowPets && <span className='no-filters-text'>No filters applied</span>}
           </div>

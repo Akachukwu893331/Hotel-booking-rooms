@@ -146,7 +146,7 @@ function RoomsList({ add }) {
                             </Tag>
                           </td>
                           <td className='data-table-body-tr-td !lowercase'>
-                            {`$ ${data?.room_price}`}
+                            {`₦ ${data?.room_price}`}
                           </td>
                           <td className='data-table-body-tr-td'>
                             {`${data?.room_size} sq. ft.`}
